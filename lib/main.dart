@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'library_page.dart';
 import 'top_page.dart';
 import 'stats_page.dart';
+import 'splash_screen.dart'; // Tambahkan impor untuk splash screen
 
 void main() {
   runApp(MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xFF0A0A0A), // Background color
         primaryColor: Color(0xFF013220), // Secondary color
       ),
-      home: HomeScreen(),
+      home: SplashScreen(), // Tampilkan splash screen terlebih dahulu
     );
   }
 }
