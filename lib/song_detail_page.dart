@@ -27,8 +27,8 @@ class SongDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(song.title),
-        backgroundColor: Color(0xFF1DB954),
+        title: Text(song.title, style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.grey[900],
         actions: [
           IconButton(
             icon: Icon(Icons.save),
@@ -36,8 +36,8 @@ class SongDetailPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -54,7 +54,7 @@ class SongDetailPage extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: _saveChanges,
                 icon: Icon(Icons.check, size: 20),
-                label: Text('Save Changes'),
+                label: Text('Save Changes', style: TextStyle(fontSize: 16)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF1DB954),
                   foregroundColor: Colors.white,

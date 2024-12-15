@@ -14,12 +14,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: Color(0xFF121212), // Background gelap
-        primaryColor: Color(0xFF1DB954), // Warna utama Spotify-like
-        fontFamily: 'RobotoSlab', // Tambahkan font ini di pubspec.yaml
+        scaffoldBackgroundColor: Color(0xFF121212),
+        primaryColor: Color(0xFF1DB954),
+        fontFamily: 'RobotoSlab',
         textTheme: TextTheme(
-          bodyMedium: TextStyle(color: Colors.grey[400]), // Pengganti bodyText2
-          bodyLarge: TextStyle(color: Colors.white), // Pengganti bodyText1
+          bodyMedium: TextStyle(color: Colors.grey[300]),
+          bodyLarge: TextStyle(color: Colors.white),
+        ),
+        colorScheme: ColorScheme.dark(
+          primary: Color(0xFF1DB954),
+          surface: Colors.grey[850] ?? Colors.grey, // Menambahkan nilai default
+          onSurface: Colors.white,
         ),
       ),
       home: SplashScreen(),
@@ -46,6 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: AnimatedSwitcher(
         duration: Duration(milliseconds: 500),
+        transitionBuilder: (widget, animation) {
+          return FadeTransition(opacity: animation, child: widget);
+        },
         child: _pages[_currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -55,9 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
             _currentIndex = index;
           });
         },
-        backgroundColor: Color(0xFF1DB954),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey[400],
+        backgroundColor: Colors.grey[900],
+        selectedItemColor: Color(0xFF1DB954),
+        unselectedItemColor: Colors.grey[500],
         type: BottomNavigationBarType.fixed,
         elevation: 10,
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),

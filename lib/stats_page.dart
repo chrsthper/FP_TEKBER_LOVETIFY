@@ -9,7 +9,7 @@ class StatsPage extends StatelessWidget {
           'Statistics',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        backgroundColor: Color(0xFF1DB954),
+        backgroundColor: Colors.grey[900],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -82,7 +82,7 @@ class StatsPage extends StatelessWidget {
     required Color color,
   }) {
     return Card(
-      color: Colors.grey[900],
+      color: Colors.grey[850],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 3,
       child: Padding(

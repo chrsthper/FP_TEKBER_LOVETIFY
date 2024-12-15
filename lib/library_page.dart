@@ -41,43 +41,55 @@ class _LibraryPageState extends State<LibraryPage> {
 
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: Colors.grey[900],
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        title: Text('Add New Song', style: TextStyle(color: Colors.white)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildTextField(_titleController, 'Title'),
-            SizedBox(height: 10),
-            _buildTextField(_lyricsController, 'Lyrics'),
-            SizedBox(height: 10),
-            _buildTextField(_translationController, 'Interpretation'),
-          ],
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Add New Song',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              SizedBox(height: 20),
+              _buildTextField(_titleController, 'Title'),
+              SizedBox(height: 15),
+              _buildTextField(_lyricsController, 'Lyrics'),
+              SizedBox(height: 15),
+              _buildTextField(_translationController, 'Interpretation'),
+              SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('Cancel', style: TextStyle(color: Colors.redAccent, fontSize: 16)),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      final newSong = Song(
+                        id: DateTime.now().toString(),
+                        title: _titleController.text,
+                        lyrics: _lyricsController.text,
+                        translation: _translationController.text,
+                      );
+                      _addSong(newSong);
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF1DB954),
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: Text('Add', style: TextStyle(fontSize: 16, color: Colors.white)),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: TextStyle(color: Colors.red)),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF1DB954),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            ),
-            onPressed: () {
-              final newSong = Song(
-                id: DateTime.now().toString(),
-                title: _titleController.text,
-                lyrics: _lyricsController.text,
-                translation: _translationController.text,
-              );
-              _addSong(newSong);
-              Navigator.pop(context);
-            },
-            child: Text('Add', style: TextStyle(color: Colors.white)),
-          ),
-        ],
       ),
     );
   }
@@ -100,8 +112,8 @@ class _LibraryPageState extends State<LibraryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Library'),
-        backgroundColor: Color(0xFF1DB954),
+        title: Text('Library', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        backgroundColor: Colors.grey[900],
       ),
       body: _songs.isEmpty
           ? Center(
@@ -116,7 +128,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 final song = _songs[index];
                 return Card(
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  color: Colors.grey[900],
+                  color: Colors.grey[850],
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                   child: ListTile(
                     title: Text(song.title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
