@@ -21,8 +21,9 @@ class TopPage extends StatelessWidget {
     '"Made for Me - Muni Long"',
     '"Thriller - Michael Jackson"',
     '"Dreamin - PARTYNEXTDOOR"',
-    '"Heart Of A Woman - Summer Walker"'
+    '"Heart Of A Woman - Summer Walker"',
   ];
+
   final List<String> albums = [
     "Utopia",
     "Mr. Morale & The Big Steppers",
@@ -43,8 +44,9 @@ class TopPage extends StatelessWidget {
     "After Hours",
     "Good Kid, M.A.A.D City",
     "Cuz I Love You",
-    "Invasion of Privacy"
+    "Invasion of Privacy",
   ];
+
   final List<String> artists = [
     "Taylor Swift",
     "The Weeknd",
@@ -65,26 +67,31 @@ class TopPage extends StatelessWidget {
     "Justin Bieber",
     "Dua Lipa",
     "Bruno Mars",
-    "Rosalía"
+    "Rosalía",
   ];
+
   final List<String> genres = ['Pop', 'Rock', 'Hip-Hop', 'Jazz', 'Classical', 'R&B', 'Electronic'];
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4, 
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
             'Top Songs',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          backgroundColor: Color(0xFF00BA4E),
-          iconTheme: IconThemeData(color: Colors.black),
+          backgroundColor: Color(0xFF1DB954),
           bottom: TabBar(
-            indicatorColor: Colors.black,
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.grey,
+            indicatorColor: Colors.white,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.grey[400],
+            labelStyle: TextStyle(fontWeight: FontWeight.bold),
             tabs: [
               Tab(text: 'Tracks'),
               Tab(text: 'Artists'),
@@ -107,32 +114,35 @@ class TopPage extends StatelessWidget {
 
   Widget _buildListView(List<String> items, IconData icon) {
     return ListView.builder(
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       itemCount: items.length,
       itemBuilder: (context, index) {
-        return Column(
-          children: [
-            Card(
-              elevation: 3,
-              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              child: ListTile(
-                leading: Icon(icon),
-                title: Text(
-                  items[index],
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'RobotoSlab',
-                  ),
-                ),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('${items[index]} clicked')),
-                  );
-                },
+        return Card(
+          color: Colors.grey[900],
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          elevation: 3,
+          margin: EdgeInsets.symmetric(vertical: 8),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Color(0xFF1DB954),
+              child: Icon(icon, color: Colors.white),
+            ),
+            title: Text(
+              items[index],
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            Divider(height: 1),
-          ],
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${items[index]} clicked'),
+                  backgroundColor: Color(0xFF1DB954),
+                ),
+              );
+            },
+          ),
         );
       },
     );

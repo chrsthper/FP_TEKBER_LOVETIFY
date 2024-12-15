@@ -1,42 +1,71 @@
 import 'package:flutter/material.dart';
 
 class StatsPage extends StatelessWidget {
-  final int streams = 1500;
-  final int minutesStreamed = 3500;
-  final int averageStreamsPerDay = 50;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Stats'),
-        backgroundColor: Color(0xFF013220),
+        title: Text(
+          'Statistics',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        backgroundColor: Color(0xFF1DB954),
       ),
-      body: _buildStatsPage(),
-    );
-  }
-
-  Widget _buildStatsPage() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Listening Stats',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'Your Listening Stats',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 20),
-            Card(
-              elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    _buildStatItem(Icons.play_arrow, 'Total Streams', streams.toString()),
-                    _buildStatItem(Icons.access_time, 'Minutes Streamed', minutesStreamed.toString()),
-                    _buildStatItem(Icons.calendar_today, 'Avg Streams/Day', averageStreamsPerDay.toStringAsFixed(2)),
-                  ],
+            _buildStatCard(
+              icon: Icons.music_note,
+              title: 'Songs Played',
+              value: '256',
+              color: Colors.blue,
+            ),
+            SizedBox(height: 15),
+            _buildStatCard(
+              icon: Icons.access_time,
+              title: 'Hours Listened',
+              value: '72',
+              color: Colors.orange,
+            ),
+            SizedBox(height: 15),
+            _buildStatCard(
+              icon: Icons.star,
+              title: 'Favorite Genre',
+              value: 'Pop',
+              color: Colors.purple,
+            ),
+            SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('More Stats Coming Soon!'),
+                      backgroundColor: Color(0xFF1DB954),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF1DB954),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'View More',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
             ),
@@ -46,11 +75,50 @@ class StatsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildStatItem(IconData icon, String label, String value) {
-    return ListTile(
-      leading: Icon(icon, size: 30),
-      title: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
-      trailing: Text(value, style: TextStyle(fontSize: 18)),
+  Widget _buildStatCard({
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color color,
+  }) {
+    return Card(
+      color: Colors.grey[900],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 30,
+              backgroundColor: color,
+              child: Icon(icon, color: Colors.white, size: 30),
+            ),
+            SizedBox(width: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  value,
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,93 +1,100 @@
 import 'package:flutter/material.dart';
 import 'song.dart';
 
-class SongDetailPage extends StatefulWidget {
+class SongDetailPage extends StatelessWidget {
   final Song song;
-  final Function(String id, Song updatedSong) onEditSong;
+  final Function(String, Song) onEditSong;
 
-  const SongDetailPage({
-    Key? key,
-    required this.song,
-    required this.onEditSong,
-  }) : super(key: key);
-
-  @override
-  _SongDetailPageState createState() => _SongDetailPageState();
-}
-
-class _SongDetailPageState extends State<SongDetailPage> {
-  late TextEditingController _lyricsController;
-  late TextEditingController _translationController;
-
-  @override
-  void initState() {
-    super.initState();
-    _lyricsController = TextEditingController(text: widget.song.lyrics);
-    _translationController = TextEditingController(text: widget.song.translation);
-  }
-
-  @override
-  void dispose() {
-    _lyricsController.dispose();
-    _translationController.dispose();
-    super.dispose();
-  }
-
-  void _saveChanges() {
-    final updatedSong = Song(
-      id: widget.song.id,
-      title: widget.song.title,
-      lyrics: _lyricsController.text,
-      translation: _translationController.text,
-    );
-    widget.onEditSong(widget.song.id, updatedSong);
-    Navigator.pop(context);
-  }
+  SongDetailPage({required this.song, required this.onEditSong});
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController _lyricsController =
+        TextEditingController(text: song.lyrics);
+    final TextEditingController _translationController =
+        TextEditingController(text: song.translation);
+
+    void _saveChanges() {
+      final updatedSong = Song(
+        id: song.id,
+        title: song.title,
+        lyrics: _lyricsController.text,
+        translation: _translationController.text,
+      );
+      onEditSong(song.id, updatedSong);
+      Navigator.pop(context);
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.song.title),
-        backgroundColor: Color(0xFF013220),
+        title: Text(song.title),
+        backgroundColor: Color(0xFF1DB954),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: _saveChanges,
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Lyrics', style: TextStyle(fontSize: 18, color: Colors.white)),
-            TextField(
-              controller: _lyricsController,
-              maxLines: 5,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: 'Enter lyrics...',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(),
-              ),
-            ),
+            _buildSectionTitle('Lyrics'),
+            SizedBox(height: 8),
+            _buildTextField(_lyricsController, 'Edit Lyrics'),
             SizedBox(height: 20),
-            Text('Translation', style: TextStyle(fontSize: 18, color: Colors.white)),
-            TextField(
-              controller: _translationController,
-              maxLines: 3,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: 'Enter translation...',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
+            _buildSectionTitle('Interpretation'),
+            SizedBox(height: 8),
+            _buildTextField(_translationController, 'Edit Interpretation'),
+            SizedBox(height: 30),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton.icon(
                 onPressed: _saveChanges,
-                child: Text('Save'),
-                style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF013220)),
+                icon: Icon(Icons.check, size: 20),
+                label: Text('Save Changes'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF1DB954),
+                  foregroundColor: Colors.white,
+                  minimumSize: Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String hint) {
+    return TextField(
+      controller: controller,
+      style: TextStyle(color: Colors.white),
+      maxLines: 5,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: TextStyle(color: Colors.grey[400]),
+        filled: true,
+        fillColor: Colors.grey[850],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
         ),
       ),
     );

@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
-import 'dart:async'; // Untuk menggunakan Timer
-
-import 'main.dart'; // Untuk mengakses HomeScreen
+import 'main.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
-    // Timer untuk berpindah ke halaman utama setelah 3 detik
-    Timer(Duration(seconds: 3), () {
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2),
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+
+    _controller.forward();
+
+    Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -22,31 +35,48 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF013220), // Warna latar belakang splash screen
+      backgroundColor: Color(0xFF1DB954),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Logo atau ikon aplikasi
-            Icon(
-              Icons.music_note, // Ganti dengan logo Anda
-              color: Colors.white,
-              size: 100,
-            ),
-            SizedBox(height: 20),
-            // Nama aplikasi
-            Text(
-              'LOVETIFY',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.music_note,
                 color: Colors.white,
-                fontFamily: 'RobotoSlab', // Gunakan font favorit Anda
+                size: 80,
               ),
-            ),
-          ],
+              SizedBox(height: 20),
+              Text(
+                'LOVETIFY',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                  fontFamily: 'RobotoSlab',
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Discover Your Favorite Music',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

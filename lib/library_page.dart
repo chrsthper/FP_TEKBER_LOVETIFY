@@ -42,40 +42,17 @@ class _LibraryPageState extends State<LibraryPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: Color(0xFF0A0A0A),
+        backgroundColor: Colors.grey[900],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         title: Text('Add New Song', style: TextStyle(color: Colors.white)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
-              controller: _titleController,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                labelText: 'Title',
-                labelStyle: TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(),
-              ),
-            ),
+            _buildTextField(_titleController, 'Title'),
             SizedBox(height: 10),
-            TextField(
-              controller: _lyricsController,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                labelText: 'Lyrics',
-                labelStyle: TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(),
-              ),
-            ),
+            _buildTextField(_lyricsController, 'Lyrics'),
             SizedBox(height: 10),
-            TextField(
-              controller: _translationController,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                labelText: 'Interpretation',
-                labelStyle: TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(),
-              ),
-            ),
+            _buildTextField(_translationController, 'Interpretation'),
           ],
         ),
         actions: [
@@ -83,7 +60,11 @@ class _LibraryPageState extends State<LibraryPage> {
             onPressed: () => Navigator.pop(context),
             child: Text('Cancel', style: TextStyle(color: Colors.red)),
           ),
-          TextButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF1DB954),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
             onPressed: () {
               final newSong = Song(
                 id: DateTime.now().toString(),
@@ -94,9 +75,23 @@ class _LibraryPageState extends State<LibraryPage> {
               _addSong(newSong);
               Navigator.pop(context);
             },
-            child: Text('Add', style: TextStyle(color: Colors.green)),
+            child: Text('Add', style: TextStyle(color: Colors.white)),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label) {
+    return TextField(
+      controller: controller,
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey[800],
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.grey[400]),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }
@@ -106,36 +101,49 @@ class _LibraryPageState extends State<LibraryPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Library'),
-        backgroundColor: Color(0xFF013220),
+        backgroundColor: Color(0xFF1DB954),
       ),
-      body: ListView.builder(
-        itemCount: _songs.length,
-        itemBuilder: (ctx, index) {
-          final song = _songs[index];
-          return ListTile(
-            title: Text(song.title, style: TextStyle(color: Colors.white)),
-            subtitle: Text(song.translation, style: TextStyle(color: Colors.grey)),
-            trailing: IconButton(
-              icon: Icon(Icons.delete, color: Colors.red),
-              onPressed: () => _deleteSong(song.id),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SongDetailPage(
-                    song: song,
-                    onEditSong: _editSong,
+      body: _songs.isEmpty
+          ? Center(
+              child: Text(
+                'No songs available. Add some!',
+                style: TextStyle(color: Colors.grey[500], fontSize: 18),
+              ),
+            )
+          : ListView.builder(
+              itemCount: _songs.length,
+              itemBuilder: (ctx, index) {
+                final song = _songs[index];
+                return Card(
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  color: Colors.grey[900],
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  child: ListTile(
+                    title: Text(song.title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    subtitle: Text(song.translation, style: TextStyle(color: Colors.grey[400])),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete, color: Colors.redAccent),
+                      onPressed: () => _deleteSong(song.id),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SongDetailPage(
+                            song: song,
+                            onEditSong: _editSong,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ),
-              );
-            },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF013220),
-        child: Icon(Icons.add),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Color(0xFF1DB954),
+        icon: Icon(Icons.add),
+        label: Text('New Song'),
         onPressed: _addNewSong,
       ),
     );
